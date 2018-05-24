@@ -17,14 +17,14 @@ if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地-------
 	define('DB_CHARSET', 'utf8mb4');
 
 	/** 数据库整理类型。如不确定请勿更改 */
-	define('DB_PREFIX', 'du_');
+	define('DB_COLLATE', 'du_');
 	/**
 	 *数据表前缀。
 	 *
 	 */
 	define('DB_PREFIX','');
 }else{
-	define('DB_NAME', '');
+	define('DB_NAME', 'du2');
 
 	/** MySQL database username */
 	define('DB_USER', 'root');
@@ -39,7 +39,12 @@ if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地-------
 	define('DB_CHARSET', 'utf8mb4');
 
 	/** The Database Collate type. Don't change this if in doubt. */
-	define('DB_PREFIX', '');
+	define('DB_COLLATE', '');
+		/**
+	 *数据表前缀。
+	 *
+	 */
+	define('DB_PREFIX','');
 }
 
 //路由方式
