@@ -8,7 +8,7 @@ class ZFC_DB{
 	public $_is_roll=0;// 1 ：开始回转 0 ：停止回转
 	public $_conn=null;
 						/*封装连接数据库*/
-	public	function connect($host = '',$dbuser = '',$dbpasswd = '',$dbname = '',$charset = 'utf8',$chang=false){
+	public	function connect($host = '',$dbuser = '',$dbpasswd = '',$dbname = '',$chang=false){
 		try {
 			$dsn="mysql:host=$host;dbname=$dbname";
 		   return $dbh = new PDO($dsn, $dbuser, $dbpasswd); //初始化一个PDO对象
