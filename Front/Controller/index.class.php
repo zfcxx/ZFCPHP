@@ -9,10 +9,8 @@ class Contorller_index
 
 		$view=new View();
 		$db=new ZFC_DB;
-		// $arr=$db->select('wuji',['type'=>5],2,'order by id DESC');
-		// $_SESSION['wuji_id']=$arr[0]['id'];
-		// $view->assign('arr',$arr);
-		// $view->assign('user_post','/index/post_wuji');
+		$arr=['title'=>'ZFCPHP框架','text'=>'欢迎使用ZFCPHP'];
+		$view->assign('arr',$arr);
 		$view->display('index');
 
 	}

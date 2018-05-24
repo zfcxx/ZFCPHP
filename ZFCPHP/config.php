@@ -1,7 +1,5 @@
 <?php defined('SYSPATH_ZFC') or die('No direct script access.');
-/*数据库的定义 $arr_db*/
-/*常量定义 $arr*/
-// echo 1233;exit;
+
 if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地---------------
 	/** WordPress数据库的名称 */
 	define('DB_NAME', 'du');
@@ -24,7 +22,7 @@ if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地-------
 	 *数据表前缀。
 	 *
 	 */
-	define('DB_PREFIX','')
+	define('DB_PREFIX','');
 }else{
 	define('DB_NAME', 'du2');
 
@@ -44,11 +42,6 @@ if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地-------
 	define('DB_COLLATE', '');
 }
 
-foreach($arr as $key=>$value){
-	define($key, $value);
-}
-
-global $arr_db; //在下面配置
 //路由方式
 $host_curl=new host_curl();
 $host_curl::$_url=[

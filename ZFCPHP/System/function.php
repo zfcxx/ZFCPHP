@@ -167,9 +167,5 @@ function convertUrlQuery($query){
 }
 
 
-//模型方法
-function D($name){
-    require SYSPATH_LOCALHOST.'/Model/'.$name.'.Model.php';
-    return new $name;
-}
+
 ?>

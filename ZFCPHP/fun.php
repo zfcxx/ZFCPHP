@@ -13,9 +13,9 @@ $_ADDRESS_='';
 for($i=0; $i<count($_ADDRESS_LOCALHOST)-1;$i++){
 	$_ADDRESS_.=$_ADDRESS_LOCALHOST[$i].'/';
 }
+_zhangfucheng_xx_vv($_ADDRESS_.'ZFCPHP/System');
+_zhangfucheng_xx_vv($_ADDRESS_.'ZFCPHP/Class','class');
 require 'config.php';
-_zhangfucheng_xx_vv($_ADDRESS_.'ZPHP/System');
-_zhangfucheng_xx_vv($_ADDRESS_.'ZPHP/Class','class');
 function _zhangfucheng_xx_vv($wj,$name=''){
 	$ddd=[];
 	if($dir=opendir($wj)){
@@ -42,6 +42,7 @@ class host_curl {
 	public static $_url=[];
 	public static $_msg='';
 	public function _host_route($fh='/',$C_name='index',$S_name='index',$html='.html',$nc=true){
+		try{
 		if(strstr(strrev($_SERVER['REQUEST_URI']),'/')==strstr(strrev($_SERVER['PHP_SELF']),'/')){
 			$_C=empty($_GET['c'])?$C_name:$_GET['c'];	
 			$_S=empty($_GET['s'])?$S_name:$_GET['s'];	
@@ -94,8 +95,12 @@ class host_curl {
 			$directory->$_S();
 			return true;
 		}
-		self::$_msg="找不到控制器!";
-		return false;
+			self::$_msg="找不到控制器!";
+			return false;
+		}catch(Exception $e)
+		 {
+		 self::$_msg='Message: ' .$e->getMessage();
+		 }
 	}
 }
 class View
@@ -113,5 +118,11 @@ class View
 	{
 	$this->data[$key] = $value;
 	}
+}
+
+//模型方法
+function D($name){
+    require SYSPATH_LOCALHOST.'/Model/'.$name.'.Model.php';
+    return new $name;
 }
 
