@@ -1,0 +1,61 @@
+<?php defined('SYSPATH_ZFC') or die('No direct script access.');
+/*数据库的定义 $arr_db*/
+/*常量定义 $arr*/
+// echo 1233;exit;
+if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地---------------
+	/** WordPress数据库的名称 */
+	define('DB_NAME', 'du');
+
+	/** MySQL数据库用户名 */
+	define('DB_USER', 'root');
+
+	/** MySQL数据库密码 */
+	define('DB_PASSWORD', '');
+
+	/** MySQL主机 */
+	define('DB_HOST', 'localhost');
+
+	/** 创建数据表时默认的文字编码 */
+	define('DB_CHARSET', 'utf8mb4');
+
+	/** 数据库整理类型。如不确定请勿更改 */
+	define('DB_COLLATE', 'du_');
+	/**
+	 *数据表前缀。
+	 *
+	 */
+	define('DB_PREFIX','')
+}else{
+	define('DB_NAME', 'du2');
+
+	/** MySQL database username */
+	define('DB_USER', 'root');
+
+	/** MySQL database password */
+	define('DB_PASSWORD', '');
+
+	/** MySQL hostname */
+	define('DB_HOST', 'localhost');
+
+	/** Database Charset to use in creating database tables. */
+	define('DB_CHARSET', 'utf8mb4');
+
+	/** The Database Collate type. Don't change this if in doubt. */
+	define('DB_COLLATE', '');
+}
+
+foreach($arr as $key=>$value){
+	define($key, $value);
+}
+
+global $arr_db; //在下面配置
+//路由方式
+$host_curl=new host_curl();
+$host_curl::$_url=[
+	'/zfc_user'=>'/user',
+];
+if(!$host_curl->_host_route())
+echo $host_curl::$_msg;
+// host_curl::_host_route('-');
+
+?>
