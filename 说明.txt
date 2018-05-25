@@ -1,2 +1,2 @@
-入口地址：\Front\Index\index.php
-入口地址：\Back\Index\index.php
+鍏ュ彛鍦板潃 \Front\Index\index.php
+鍏ュ彛鍦板潃 \Back\Index\index.php
