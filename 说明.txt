@@ -1,0 +1,2 @@
+入口地址 \Front\Index\index.php
+入口地址 \Back\Index\index.php
