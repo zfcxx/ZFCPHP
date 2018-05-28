@@ -2,7 +2,7 @@
 /**
 * 
 */
-class Contorller_index 
+class Contorller_index extends Controller_B
 {
 
 	public function index(){
