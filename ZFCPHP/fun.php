@@ -1,7 +1,7 @@
 <?php
 /*  [作者:zhangfucheng]*********************************
     */
-define('SYSPATH_ZFC','ZPHP');
+define('SYSPATH_ZFC','ZFCPHP');
 if(!defined('SYSPATH_LOCALHOST'))
 define('SYSPATH_LOCALHOST','');
 if(PATH_SEPARATOR==':')
@@ -15,7 +15,10 @@ for($i=0; $i<count($_ADDRESS_LOCALHOST)-1;$i++){
 }
 _zhangfucheng_xx_vv($_ADDRESS_.'ZFCPHP/System');
 _zhangfucheng_xx_vv($_ADDRESS_.'ZFCPHP/Class','class');
-require 'config.php';
+if(defined('USER_CONFIG'))
+	require USER_CONFIG;
+	else
+	require 'config.php';
 function _zhangfucheng_xx_vv($wj,$name=''){
 	$ddd=[];
 	if($dir=opendir($wj)){
