@@ -42,7 +42,8 @@ function _zhangfucheng_xx_vv($wj,$name=''){
 *  路由类
 */
 class host_curl {
-	public static $_url=[];
+	public static $_url=[];//路由替换
+	public static $_re_url=[];//正则路由
 	public static $_msg='';
 	public function _host_route($fh='/',$C_name='index',$S_name='index',$html='.html',$nc=true){
 		try{
@@ -58,6 +59,10 @@ class host_curl {
 			}
 			if(isset(self::$_url[$url])){
 				 $url=self::$_url[$url];
+			}elseif(!empty(self::$_re_url)){
+				foreach(self::$_re_url as $ku=>$vu){	
+					$url=preg_replace($ku,$vu,$url);
+				}
 			}
 			$url=trim($url,$fh);
 			$url_address=explode($fh,$url);

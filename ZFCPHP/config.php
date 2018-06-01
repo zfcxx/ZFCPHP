@@ -48,11 +48,20 @@ if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地-------
 
 //路由方式
 $host_curl=new host_curl();
+
+//路由替换
 $host_curl::$_url=[
 	'/zfc_user'=>'/user',
 ];
+
+//正则路由
+$host_curl::$_re_url=[
+	'/(.*?)p/'=>'/index/index/',
+];
+
+// host_curl::_host_route('-');//路由方式
 if(!$host_curl->_host_route())
 echo $host_curl::$_msg;
-// host_curl::_host_route('-');
+
 
 ?>
