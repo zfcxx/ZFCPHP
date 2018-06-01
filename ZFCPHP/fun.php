@@ -26,7 +26,7 @@ function _zhangfucheng_xx_vv($wj,$name=''){
 		$ddd[]=$file;
 		}
 		foreach ($ddd as $key => $value) {
-			if($value =='.' || $value =='..')
+			if($value =='.' || $value =='..'||!strstr($value,'.php'))
 				  continue;
 				if(!$name)
 		    		require  $wj.'/'.$value;   
