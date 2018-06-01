@@ -82,13 +82,13 @@ class host_curl {
 		if(is_readable($file)){	
 			require $file;	
 			if(!class_exists($_C)){
-				self::$_msg=$url.'控制器未定义!';
+				self::$_msg=$url.' : 控制器未定义!';
 				return false;
 			}
 			$directory=new $_C;
 			if(!method_exists($directory,$_S)){
 				if(!method_exists($directory,$S_name)){
-					self::$_msg=$url.'未定义方法！';
+					self::$_msg=$url.' : 未定义方法！';
 			    	return false;
 				}
 			    $_S=$S_name;
@@ -103,7 +103,7 @@ class host_curl {
 			$directory->$_S();
 			return true;
 		}
-			self::$_msg=$url.'找不到控制器!';
+			self::$_msg=$url.' : 找不到控制器!';
 			return false;
 		}catch(Exception $e)
 		 {
