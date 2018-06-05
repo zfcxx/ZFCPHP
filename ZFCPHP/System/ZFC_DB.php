@@ -11,7 +11,7 @@ class ZFC_DB{
 	public	function connect($host = '',$dbuser = '',$dbpasswd = '',$dbname = '',$chang=false){
 		try {
 			$dsn="mysql:host=$host;dbname=$dbname";
-		   return $dbh = new PDO($dsn, $dbuser, $dbpasswd); //初始化一个PDO对象
+		   return $dbh = new PDO($dsn, $dbuser, $dbpasswd,array(PDO::MYSQL_ATTR_INIT_COMMAND => 'set names '.DB_CHARSET)); //初始化一个PDO对象
 		} catch (PDOException $e) {
 		    die ("Error!: " . $e->getMessage() . "<br/>");
 		}

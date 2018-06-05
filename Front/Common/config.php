@@ -13,7 +13,7 @@ if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地-------
 	define('DB_HOST', 'localhost');
 
 	/** 创建数据表时默认的文字编码 */
-	define('DB_CHARSET', 'utf8mb4');
+	define('DB_CHARSET', 'utf8');
 
 	/** 数据库整理类型。如不确定请勿更改 */
 	define('DB_COLLATE', 'du_');
@@ -23,19 +23,19 @@ if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地-------
 	 */
 	define('DB_PREFIX','');
 }else{
-	define('DB_NAME', 'du2');
+	define('DB_NAME', 'hd');
 
 	/** MySQL database username */
-	define('DB_USER', 'root');
+	define('DB_USER', 'zhangfucheng');
 
 	/** MySQL database password */
-	define('DB_PASSWORD', '');
+	define('DB_PASSWORD', 'woshidashen-123');
 
 	/** MySQL hostname */
 	define('DB_HOST', 'localhost');
 
 	/** Database Charset to use in creating database tables. */
-	define('DB_CHARSET', 'utf8mb4');
+	define('DB_CHARSET', 'utf8');
 
 	/** The Database Collate type. Don't change this if in doubt. */
 	define('DB_COLLATE', '');
@@ -43,7 +43,7 @@ if(preg_match("~\.zfc~si", $_SERVER['SERVER_NAME'])){ //-----------本地-------
 	 *数据表前缀。
 	 *
 	 */
-	define('DB_PREFIX','');
+	define('DB_PREFIX','h_');
 }
 
 //路由方式
