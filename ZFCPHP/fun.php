@@ -64,7 +64,7 @@ class host_curl {
 					$url=preg_replace($ku,$vu,$url);
 				}
 			}
-			$url=trim($url,$fh);
+			$url=trim($url,'/');
 			$url_address=explode($fh,$url);
 			$url_address[0]=trim($url_address[0],$fh);
 			$_C='';
