@@ -42,7 +42,7 @@ class ZFC_DB{
 	}
 
 	/*查询数据*/
-	public function select($table='',$where=[],$limit=[],$order=''){
+	public function select($table='',$where=[],$limit=[],$order='',$key=''){
 		if(empty($table)){
 			return 'table empty';
 		}
@@ -83,7 +83,10 @@ class ZFC_DB{
 			$data = array();//定一个空数组 存放数据
 			if($query){
 				foreach($query as $assoc){//执行数据库语句 返回记录集（特殊资源类型）
-					$data[$assoc[0]] = $assoc;//循环遍历把获取的数据塞进$data[]这个数组里面
+					if(empty($key))
+					$data[] = $assoc;//循环遍历把获取的数据塞进$data[]这个数组里面
+					else
+					$data[$assoc[$key]] = $assoc;//循环遍历把获取的数据塞进$data[]这个数组里面
 				}
 			}
 			return $data;
