@@ -27,7 +27,7 @@ class ZFC_DB{
 		$z_v='';
 		foreach ($arr as $key => $value) {
 		        $z_k.="`{$key}`,";
-		        $value=str_replace("'","''",$value);
+		        $value=mysql_real_escape_string($value);
 		        $z_v.="'{$value}',";
 		 }
 		 $z_k=rtrim($z_k,',');
@@ -52,7 +52,7 @@ class ZFC_DB{
 			if(is_array($where)){
 				
 				foreach ($where as $k => $v) {
-					$v=str_replace("'","''",$v);
+					$v=mysql_real_escape_string($v);
 						$where_z.=" `{$k}`='{$v}' and";
 				}	
 			}else{
@@ -105,7 +105,7 @@ class ZFC_DB{
 			if(is_array($where)){
 				
 				foreach ($where as $k => $v) {
-					$v=str_replace("'","''",$v);
+					$v=mysql_real_escape_string($v);
 						$where_z.=" `{$k}`='{$v}' and";
 				}	
 			}else{
@@ -119,7 +119,7 @@ class ZFC_DB{
 		if(!empty($data)){
 			if(is_array($data)){
 				foreach ($data as $k => $v) {
-					$v=str_replace("'","''",$v);
+					$v=mysql_real_escape_string($v);
 						$data_z.="`{$k}`='{$v}',";
 				}	
 			}else{
@@ -147,7 +147,7 @@ class ZFC_DB{
 			$z_v='';
 			foreach ($arr as $key => $value) {
 			        $z_k.="`{$key}`,";
-			        $value=str_replace("'","''",$value);
+			        $value=mysql_real_escape_string($value);
 			        $z_v.="'{$value}',";
 			 }
 			 $z_k=rtrim($z_k,',');
@@ -172,7 +172,7 @@ class ZFC_DB{
 			if(is_array($where)){
 				
 				foreach ($where as $k => $v) {
-					$v=str_replace("'","''",$v);
+					$v=mysql_real_escape_string($v);
 						$where_z.=" `{$k}`='{$v}' and";
 				}	
 			}else{
