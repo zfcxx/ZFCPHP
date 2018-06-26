@@ -102,8 +102,7 @@ class host_curl {
 					}
 				}
 			}
-			$method=self::$_methodName;
-			$directory->$method();
+			$directory->self::$_methodName();
 			return true;
 		}
 			self::$_msg=$url.' : 找不到控制器!';
