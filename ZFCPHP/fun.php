@@ -47,7 +47,7 @@ class host_curl {
 	public static $_msg='';
 	public static $_controlName='';
 	public static $_methodName=''; 
-	public function _host_route($fh='/',$C_name='index',$S_name='index',$html='.html',$nc=true){
+	public function _host_route($fh='/',$C_name='index',$S_name='index',$suffix='html|php',$nc=true){
 		try{
 		if(strstr(strrev($_SERVER['REQUEST_URI']),'/')==strstr(strrev($_SERVER['PHP_SELF']),'/')){
 			self::$_controlName=empty($_GET['c'])?$C_name:$_GET['c'];	
@@ -72,7 +72,7 @@ class host_curl {
 			self::$_controlName='';
 			self::$_methodName='';
 			foreach($url_address as $key=>$value){
-				$value=rtrim($value,$html);
+				$value=preg_replace('/.('.$suffix.')/','',$value);
 				self::$_methodName=(!empty($value)&&empty(self::$_methodName)&&!empty(self::$_controlName))?$value:self::$_methodName;
 				self::$_controlName=(!empty($value)&&empty(self::$_controlName))?$value:self::$_controlName;
 			}
