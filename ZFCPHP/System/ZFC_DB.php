@@ -7,18 +7,26 @@ class ZFC_DB{
 	public $_roll=false;
 	public $_is_roll=0;// 1 ：开始回转 0 ：停止回转
 	public $_conn=null;
+	public $_key='';
 						/*封装连接数据库*/
-	public	function connect($host = '',$dbuser = '',$dbpasswd = '',$dbname = '',$chang=false){
+	public	function connect($host = DB_HOST,$dbuser = DB_USER,$dbpasswd = DB_PASSWORD,$dbname = DB_NAME,$chang=false){
 		try {
-			$dsn="mysql:host=$host;dbname=$dbname";
-		   return $dbh = new PDO($dsn, $dbuser, $dbpasswd,array(PDO::MYSQL_ATTR_INIT_COMMAND => 'set names '.DB_CHARSET)); //初始化一个PDO对象
+			
+			$dsn="mysql:host=$host;dbname=$dbname";	
+			
+		    $dbh = new PDO($dsn, $dbuser, $dbpasswd,array(PDO::MYSQL_ATTR_INIT_COMMAND => 'set names '.DB_CHARSET)); //初始化一个PDO对象
+		   	$dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+		   	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		   	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+		   	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 		} catch (PDOException $e) {
 		    die ("Error!: " . $e->getMessage() . "<br/>");
 		}
 		if($chang){
 			//默认这个不是长连接，如果需要数据库长连接，需要最后加一个参数：array(PDO::ATTR_PERSISTENT => true) 变成这样：
-			$db = new PDO($dsn, $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+			$dbh->setAttribute(PDO::ATTR_PERSISTENT, true);
 		}
+		return $dbh;
 	}
 
 /*插入一条数据*/
@@ -27,8 +35,8 @@ class ZFC_DB{
 		$z_v='';
 		foreach ($arr as $key => $value) {
 		        $z_k.="`{$key}`,";
-		        $value=mysql_real_escape_string($value);
-		        $z_v.="'{$value}',";
+		        $value=$this->_escape_str($value);
+		        $z_v.="{$value},";
 		 }
 		 $z_k=rtrim($z_k,',');
 		 $z_v=rtrim($z_v,',');
@@ -42,7 +50,7 @@ class ZFC_DB{
 	}
 
 	/*查询数据*/
-	public function select($table='',$where=[],$limit=[],$order='',$key=''){
+	public function select($table='',$where=[],$limit=[],$order='',$keys='',$name='*'){
 		if(empty($table)){
 			return 'table empty';
 		}
@@ -52,8 +60,8 @@ class ZFC_DB{
 			if(is_array($where)){
 				
 				foreach ($where as $k => $v) {
-					$v=mysql_real_escape_string($v);
-						$where_z.=" `{$k}`='{$v}' and";
+					$v=$this->_escape_str($v);
+						$where_z.=" `{$k}`={$v} and";
 				}	
 			}else{
 				$where_z.=$where;
@@ -74,24 +82,73 @@ class ZFC_DB{
 			}
 			
 		}
-	 	$this->_sql="SELECT * FROM  `".DB_PREFIX."{$table}` {$where_z} {$order} {$limit_z}";
+	 	$this->_sql="SELECT $name FROM  `".DB_PREFIX."{$table}` {$where_z} {$order} {$limit_z}";
+	 	if($this->is_sql){
+	    	return $this->_sql;
+	    }else{
+	    	$this->_key=$keys;
+	    	$query= $this->query('SELECT',$this->_sql);	
+			return $query;
+		}
+		
+	}
+
+	/*查询数据*/
+	public function count($table='',$where=[]){
+		if(empty($table)){
+			return 'table empty';
+		}
+		$where_z='';
+		if(!empty($where)){
+			$where_z='where ';
+			if(is_array($where)){
+				
+				foreach ($where as $k => $v) {
+					$v=$this->_escape_str($v);
+						$where_z.=" `{$k}`={$v} and";
+				}	
+			}else{
+				$where_z.=$where;
+			}
+				
+		}
+		$where_z=rtrim($where_z,"and");
+	 	$this->_sql="SELECT count(*) as num FROM  `".DB_PREFIX."{$table}` {$where_z} limit 1";
 	 	if($this->is_sql){
 	    	return $this->_sql;
 	    }else{
 	    	$query= $this->query('SELECT',$this->_sql);	
-	    
-			$data = array();//定一个空数组 存放数据
-			if($query){
-				foreach($query as $assoc){//执行数据库语句 返回记录集（特殊资源类型）
-					if(empty($key))
-					$data[] = $assoc;//循环遍历把获取的数据塞进$data[]这个数组里面
-					else
-					$data[$assoc[$key]] = $assoc;//循环遍历把获取的数据塞进$data[]这个数组里面
-				}
-			}
-			return $data;
+			return isset($query[0]['num'])?$query[0]['num']:0;
 		}
 		
+	}
+
+	public function one($table='',$where=[],$name='*',$order=''){
+		if(empty($table)){
+			return 'table empty';
+		}
+		$where_z='';
+		if(!empty($where)){
+			$where_z='where ';
+			if(is_array($where)){
+				
+				foreach ($where as $k => $v) {
+					$v=$this->_escape_str($v);
+						$where_z.=" `{$k}`={$v} and";
+				}	
+			}else{
+				$where_z.=$where;
+			}
+				
+		}
+		$where_z=rtrim($where_z,"and");
+	 	$this->_sql="SELECT $name FROM  `".DB_PREFIX."{$table}` {$where_z} {$order} limit 1";
+	 	if($this->is_sql){
+	    	return $this->_sql;
+	    }else{
+	    	$query= $this->query('SELECT',$this->_sql);	
+			return isset($query[0])?$query[0]:false;
+		}
 	}
 
 	/*修改数据*/
@@ -105,8 +162,8 @@ class ZFC_DB{
 			if(is_array($where)){
 				
 				foreach ($where as $k => $v) {
-					$v=mysql_real_escape_string($v);
-						$where_z.=" `{$k}`='{$v}' and";
+					$v=$this->_escape_str($v);
+						$where_z.=" `{$k}`={$v} and";
 				}	
 			}else{
 				$where_z.=$where;
@@ -119,8 +176,8 @@ class ZFC_DB{
 		if(!empty($data)){
 			if(is_array($data)){
 				foreach ($data as $k => $v) {
-					$v=mysql_real_escape_string($v);
-						$data_z.="`{$k}`='{$v}',";
+					$v=$this->_escape_str($v);
+						$data_z.="`{$k}`={$v},";
 				}	
 			}else{
 				$data_z.=$data;
@@ -147,7 +204,7 @@ class ZFC_DB{
 			$z_v='';
 			foreach ($arr as $key => $value) {
 			        $z_k.="`{$key}`,";
-			        $value=mysql_real_escape_string($value);
+			        $value=$this->_escape_str($value);
 			        $z_v.="'{$value}',";
 			 }
 			 $z_k=rtrim($z_k,',');
@@ -172,8 +229,8 @@ class ZFC_DB{
 			if(is_array($where)){
 				
 				foreach ($where as $k => $v) {
-					$v=mysql_real_escape_string($v);
-						$where_z.=" `{$k}`='{$v}' and";
+					$v=$this->_escape_str($v);
+						$where_z.=" `{$k}`={$v} and";
 				}	
 			}else{
 				$where_z.=$where;
@@ -195,14 +252,18 @@ class ZFC_DB{
 /*运行数据库语句*/
 	public function query($ff='',$sql,$is=0,$database='',$hostname='',$username='',$password=''){
 		global $arr_db;
-		if(empty($database))
-			$database=DB_NAME;
-		if(empty($hostname))
-			$hostname=DB_HOST;
-		if(empty($username))
-			$username=DB_USER;
-		if(empty($password))
-			$password=DB_PASSWORD;
+		if(!defined('SYSPATH_SQL_HOST')){
+			if(empty(DB_NAME))
+				exit();
+			if(empty($database))
+				$database=DB_NAME;
+			if(empty($hostname))
+				$hostname=DB_HOST;
+			if(empty($username))
+				$username=DB_USER;
+			if(empty($password))
+				$password=DB_PASSWORD;
+		}
 		try {
 			if(!$this->_conn)
 				$this->_conn =$this->connect($hostname,$username,$password,$database);
@@ -210,19 +271,31 @@ class ZFC_DB{
 				$this->_is_roll=1;
 				$this->_conn->beginTransaction(); 
 			}
-			if('SELECT'===$ff)
-			 return	$this->_conn->query($sql);
-			 $res=$this->_conn->exec($sql) or die(print_r($this->_conn->errorInfo(), true));;
-			if($this->_roll===0&&$this->_is_roll===1){
-				$this->_conn->rollBack();
+			if('SELECT'===$ff){
+			 return	$this->select_arr($this->_conn->query($sql));
 			}
-			if($this->_roll===0){
+
+
+			 $res=$this->_conn->exec($sql);
+			if(!$res){
+			      throw new PDOException('执行异常:'.$sql);
+			   }
+			if($this->_roll===0&&$this->_is_roll===1){
+				 $this->_conn->commit();
+				// $this->_conn->rollBack();
+			}
+			if('INSERT'===$ff&&$this->_roll===false)
+			return $this->_conn->lastInsertId();
+
+			if($this->_roll===0||$this->_roll===false){
 				$this->_conn=null;
 			}
 		} catch (PDOException $e) {
+			$this->_conn->rollBack();
 		    die ("Error!: " . $e->getMessage() . "<br/>");
 		}
 		// $res = mysqli_query($conn,$sql);//第一个参数连接数据库返回的句柄  ， 第二参数执行语句
+
 		return $res;
 	}
 
@@ -236,38 +309,63 @@ class ZFC_DB{
 	$show 表显示的字段  *注：一定有$where里面的字段
 	*/
 	public function zfc_join($list=[],$table='',$k1='',$k2='',$where=[],$show=''){
-        $li='';
-        foreach($list as $k=>$v){
-            $li.="'".$v[$k1]."',";
+		if(empty($list))
+			return $list;
+        $li=$this->arr_in($list,$k1);
+        $where_t='';
+        if(!is_array($where)){
+        	$where_t=' and '.$where;
         }
-         $li=rtrim($li,',');
-         // if(!empty($where)){
-         //    $where=' and '.$where;
-         // }
          if(empty($show)){
-            $sql="SELECT * from `{$table}` where `{$k2}` in({$li})";
+            $this->_sql="SELECT * from  `".DB_PREFIX."{$table}` where `{$k2}` in({$li})  $where_t";
          }else{
-            $sql="SELECT {$show} from `{$table}` where `{$k2}` in({$li})";
+            $this->_sql="SELECT `$k2`,{$show} from  `".DB_PREFIX."{$table}` where `{$k2}` in({$li})  $where_t";
          }
-         $li_z=$this->as_array($sql);
+         $li_z=$this->as_array($this->_sql);
          foreach($list as $k=>$v){
             foreach($li_z as $kk=>$vv){
                 $tii=true;
                 if($v[$k1]!=$vv[$k2]){
                     $tii=false;
                 }
-                foreach($where as $kkk=>$vvv){
-                    if($v[$kkk]!=$vv[$vvv]){
-                        $tii=false;
-                    }
+                if(!empty($where)&&is_array($where)){
+                	foreach($where as $kkk=>$vvv){
+	                    if($v[$kkk]!=$vv[$vvv]){
+	                        $tii=false;
+	                    }
+	                }
                 }
+
                 if($tii){
-                    $list[$k]=array_merge($list[$k],$vv);
+                    $list[$k]=array_merge($vv,$list[$k]);
                 }
 
             }
          }
         return $list;
+    }
+
+   	public function select_arr($query){
+   		$data = array();//定一个空数组 存放数据
+		if($query){
+			foreach($query as $assoc){//执行数据库语句 返回记录集（特殊资源类型）
+				if(empty($this->_key)||!isset($assoc[$this->_key]))
+				$data[] = $assoc;//循环遍历把获取的数据塞进$data[]这个数组里面
+				else
+				$data[$assoc[$this->_key]] = $assoc;//循环遍历把获取的数据塞进$data[]这个数组里面
+			}
+		}
+		$this->_conn=null;
+		return $data;
+   	}
+
+    //获取数组某个值生成in条件
+    public function arr_in($arr,$k){
+    	$in='';
+    	foreach($arr as $v){
+    		$in.="'".$v[$k]."',";
+    	}
+    	return rtrim($in,',');
     }
 
 
@@ -281,6 +379,13 @@ class ZFC_DB{
 		}
 		return $data;
 	}
+
+	public function _escape_str($str)
+	{
+		return stripslashes("'".str_replace("'","''",$str)."'");
+
+	}
+
 
 }
 
