@@ -1,2 +1,69 @@
 入口地址 \Front\Index\index.php
 入口地址 \Back\Index\index.php
+
+---------------------------------------------------------------------------------------------------------------
+在相同环境下ab测试以thinkphp
+
+ZFCPHP ab测试结果
+Server Software:        Apache/2.4.33
+Server Hostname:        zfcphp
+Server Port:            80
+
+Document Path:          /
+Document Length:        797 bytes
+
+Concurrency Level:      100
+Time taken for tests:   3.771 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      1205000 bytes
+HTML transferred:       797000 bytes
+Requests per second:    265.17 [#/sec] (mean)
+Time per request:       377.122 [ms] (mean)
+Time per request:       3.771 [ms] (mean, across all concurrent requests)
+Transfer rate:          312.04 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.4      0       3
+Processing:    75  367 119.5    343    1005
+Waiting:       23  367 119.6    343    1005
+Total:         75  367 119.5    344    1006
+---------------------------------------------------------------------------------------------------------
+thinkphp ab测试结果
+Server Software:        Apache/2.4.33
+Server Hostname:        thinkphp
+Server Port:            80
+
+Document Path:          /
+Document Length:        7603 bytes
+
+Concurrency Level:      100
+Time taken for tests:   9.550 seconds
+Complete requests:      1000
+Failed requests:        0
+Non-2xx responses:      1000
+Total transferred:      7840000 bytes
+HTML transferred:       7603000 bytes
+Requests per second:    104.72 [#/sec] (mean)
+Time per request:       954.955 [ms] (mean)
+Time per request:       9.550 [ms] (mean, across all concurrent requests)
+Transfer rate:          801.74 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       4
+Processing:    83  931 181.6    914    1715
+Waiting:       47  929 182.1    911    1714
+Total:         84  931 181.5    914    1716
+
+Percentage of the requests served within a certain time (ms)
+  50%    914
+  66%    979
+  75%   1016
+  80%   1048
+  90%   1135
+  95%   1269
+  98%   1405
+  99%   1542
+ 100%   1716 (longest request)
