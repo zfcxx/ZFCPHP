@@ -29,6 +29,17 @@ Connect:        0    0   0.4      0       3
 Processing:    75  367 119.5    343    1005
 Waiting:       23  367 119.6    343    1005
 Total:         75  367 119.5    344    1006
+
+Percentage of the requests served within a certain time (ms)
+  50%    344
+  66%    379
+  75%    402
+  80%    422
+  90%    506
+  95%    623
+  98%    744
+  99%    801
+ 100%   1006 (longest request)
 ---------------------------------------------------------------------------------------------------------
 thinkphp ab测试结果
 Server Software:        Apache/2.4.33
